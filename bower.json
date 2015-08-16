@@ -1,0 +1,30 @@
+{
+  "name": "projects_manager",
+  "description": "Projects Manager",
+  "version": "1.0.0",
+  "homepage": "https://github.com/iyakhiev/projects_manager",
+  "license": "MIT",
+  "dependencies": {
+      "angular": "~1.4.0",
+      "angular-resource": "~1.4.4",
+      "angular-route": "~1.4.4",
+      "fontawesome": "~4.4.0",
+      "jquery": "~2.1.4",
+      "bootstrap": "~3.3.5"
+  },
+  "authors": [
+    "Yakhiev Isa isa.ya@mail.ru"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
+  "main": "server/server.js",
+  "moduleType": [
+    "node"
+  ]
+}

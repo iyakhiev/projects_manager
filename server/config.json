@@ -1,0 +1,9 @@
+{
+    "port": 8080,
+    "db": {
+        "host": "localhost",
+        "db": "projects_manager",
+        "user": "root",
+        "password": "030193"
+    }
+}

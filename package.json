@@ -1,0 +1,36 @@
+{
+  "name": "projects_manager",
+  "version": "1.0.0",
+  "description": "Projects Manager",
+  "main": "karma.conf.js",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "bower": "^1.4.1",
+    "http-server": "^0.6.1",
+    "express": "^4.13.3",
+    "karma": "^0.12.37",
+    "karma-chrome-launcher": "^0.1.12",
+    "jasmine-core": "^2.3.4",
+    "karma-jasmine": "^0.3.6",
+    "karma-junit-reporter": "^0.2.2",
+    "mysql": "^2.8.0",
+    "protractor": "^2.1.0",
+    "shelljs": "^0.2.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "postinstall": "bower install",
+    "prestart": "npm install",
+    "start": "node server/server.js"
+  },
+  "author": "Yakhiev Isa",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iyakhiev/projects_manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iyakhiev/projects_manager/issues"
+  },
+  "homepage": "https://github.com/iyakhiev/projects_manager#readme"
+}

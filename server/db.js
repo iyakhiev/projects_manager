@@ -1,0 +1,294 @@
+var mysql = require('mysql'),
+    config = require('./config');
+
+var pool = mysql.createPool({
+    host: config.db.host,
+    user: config.db.user,
+    password: config.db.password,
+    database: config.db.db
+});
+
+var getUser = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("SELECT * FROM pm_users" + (data.id > 0 ? ("WHERE id = " + data.id) : "") + ";",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({rows: rows});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var getConnection = function(callback) {
+    pool.getConnection(function (err, connection) {
+        callback(err, connection);
+    });
+};
+
+var getProject = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({ "place": "1", "id": "-1", "code": err});
+            return;
+        }
+
+        var queryForAll =
+            "SELECT * FROM " +
+                "(SELECT * FROM " +
+                    "(SELECT * FROM pm_projects WHERE (id in (SELECT projectId FROM pm_project_participants WHERE userId = " + data.userId + ") OR creatorId = " + data.userId + ")) as t1 " +
+                "LEFT JOIN " +
+                    "(SELECT id as uid, name FROM pm_users) as t2 " +
+                "ON t1.creatorId = t2.uid) as t5 " +
+            "LEFT JOIN " +
+                "(SELECT GROUP_CONCAT(t1.name SEPARATOR ', ') as participants, projectId FROM " +
+                    "(SELECT name, projectId FROM " +
+                        "(SELECT * FROM pm_project_participants) as t3 " +
+                    "LEFT JOIN " +
+                        "(SELECT id as uid, name FROM pm_users) as t4 " +
+                    "ON t3.userId = t4.uid) as t1 " +
+                "GROUP BY projectId) as t6 " +
+            "ON t5.id = t6.projectId;";
+
+        var queryForOne = "SELECT * FROM pm_projects WHERE " +
+            "(id in (SELECT projectId FROM pm_project_participants WHERE userId = " + data.userId + ") OR creatorId = " + data.userId + ") " +
+            "AND " +
+            "id = " + data.id + ";";
+
+        connection.query((data.id > 0 ? queryForOne : queryForAll),
+            function (err, rows) {
+                if (err) {
+                    callback({ "place": "2", "id": "-1", "code": err});
+                    connection.release();
+                    return;
+                }
+
+                callback({rows: rows});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var deleteProject = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("DELETE FROM pm_tasks WHERE projectId = " + data.id + ";",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                connection.query("DELETE FROM pm_projects WHERE id = " + data.id + ";",
+                    function (err, rows) {
+                        if (err) {
+                            callback({"id": "-1", "code": err.code});
+                            connection.release();
+                            return;
+                        }
+
+                        callback({rows: rows});
+                        connection.release();
+                        return;
+                    });
+            });
+
+    });
+};
+
+var updateProject = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("UPDATE pm_projects SET `title`='" + data.title + "', `description`='" + data.description + "' " +
+            "WHERE `id`='" + data.id + "';",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({rows: rows});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var addProject = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("INSERT INTO `pm_projects` (`title`, `description`, `creatorId`, `creationDate`, `updateDate` ) " +
+            "VALUES ('" + data.title + "', '" + data.description + "', '" + data.creatorId + "', NOW(), NOW());",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({"id": rows.insertId});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var addTask = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("INSERT INTO pm_tasks (`title`, `description`, `priority`, `plannedCapacity`, `actualCapacity`, `assigneeId`, `creatorId`, `projectId`, `status`) " +
+            "VALUES ('" + data.title + "', '" + data.description + "', '" + data.priority + "', '" + data.plannedCapacity + "', " +
+            "'" + data.actualCapacity + "', '" + data.assigneeId + "', '" + data.creatorId + "', '" + data.projectId + "', '" + data.status + "');",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({"id": rows.insertId});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var getTask = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("SELECT * FROM " +
+            "(SELECT * FROM pm_tasks WHERE " + (data.id > 0 ? "id = " + data.id : "projectId = " + data.projectId) + " ) as t1 " +
+            "LEFT JOIN " +
+            "(SELECT id as uid, name FROM pm_users) as t2 " +
+            "ON t1.assigneeId = t2.uid;",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({"rows": rows});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var updateTask = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        var properties = [];
+        if (data.title != undefined) {
+            properties.push(("`title`='" + data.title + "'"));
+        }
+        if (data.description != undefined) {
+            properties.push(("`description`='" + data.description + "'"));
+        }
+        if (data.priority != undefined) {
+            properties.push(("`priority`='" + data.priority + "'"));
+        }
+        if (data.plannedCapacity != undefined) {
+            properties.push(("`plannedCapacity`='" + data.plannedCapacity + "'"));
+        }
+        if (data.actualCapacity != undefined) {
+            properties.push(("`actualCapacity`='" + data.actualCapacity + "'"));
+        }
+        if (data.assigneeId != undefined) {
+            properties.push(("`assigneeId`='" + data.assigneeId + "'"));
+        }
+        if (data.status != undefined) {
+            properties.push(("`status`='" + data.status + "'"));
+        }
+
+        connection.query("UPDATE pm_tasks SET " + properties.join(", ") + " WHERE `id`='" + data.id + "';",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({rows: rows});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+var deleteTask = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("DELETE FROM pm_tasks WHERE id = " + data.id + ";",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({rows: rows});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
+module.exports.updateProject = updateProject;
+module.exports.deleteProject = deleteProject;
+module.exports.getProject = getProject;
+module.exports.addProject = addProject;
+module.exports.updateTask = updateTask;
+module.exports.deleteTask = deleteTask;
+module.exports.addTask = addTask;
+module.exports.getTask = getTask;
+module.exports.getUser = getUser;

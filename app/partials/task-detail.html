@@ -1,0 +1,31 @@
+<div class="edit-jumb jumbotron">
+    <form name="myForm">
+        <div class="form-group" ng-class="{'has-error': myForm.title.$invalid}">
+            <label class="control-label" for="taskTitle">Task title</label>
+            <input class="form-control" type="text" name="title" ng-model="task.title" id="taskTitle" placeholder="My task" required>
+        </div>
+        <div class="form-group" ng-class="{'has-error': myForm.plannedCapacity.$invalid}">
+            <label class="control-label" for="plannedCapacity">Planned capacity, hrs</label>
+            <input class="form-control" type="number" min="0" name="plannedCapacity" ng-model="task.plannedCapacity" id="plannedCapacity" placeholder="" required>
+        </div>
+        <div class="form-group" ng-class="{'has-error': myForm.actualCapacity.$invalid}">
+            <label class="control-label" for="actualCapacity">Actual capacity, hrs</label>
+            <input class="form-control" type="number" min="0" max="{{task.plannedCapacity}}" name="actualCapacity" ng-model="task.actualCapacity" id="actualCapacity" placeholder="" required>
+        </div>
+        <div class="form-group" ng-class="{'has-error': myForm.assigneeId.$invalid}">
+            <label class="control-label" for="assignee">Assignee</label>
+            <select class="form-control" id="assignee" name="assigneeId" ng-model="task.assigneeId" ng-options="p.id as p.name for p in users" required></select>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="priority">Priority</label>
+            <select class="form-control" id="priority" ng-model="task.priority" ng-options="p.color as p.color for p in priority"></select>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="taskDescription">Description</label>
+            <textarea type="text" class="form-control" ng-model="task.description" id="taskDescription"></textarea>
+        </div>
+        <a href="#/{{title}}/{{projectID}}/tasks" class="btn btn-default">Cancel</a>
+        <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="myForm.$invalid">Save</button>
+        <button type="button" class="btn btn-danger" ng-click="delete()" ng-show="task.id">Delete</button>
+    </form>
+</div>

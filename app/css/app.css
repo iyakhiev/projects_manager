@@ -1,0 +1,379 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body {
+    padding-top: 70px;
+    background-color: rgba(204, 204, 204, 0.2);
+}
+
+body::-webkit-scrollbar {
+    width: 7px;
+    background-color: #e2e2e2;
+    cursor: pointer;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: #979797;
+}
+
+.clearfix::after, .clearfix::before {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.navbar-brand {
+    padding: 13px 15px;
+    font-family: "HelveticaThin";
+    font-size: 25px;
+    line-height: 25px;
+    letter-spacing: 1px;
+}
+
+.hell {
+    font-family: "Helvetica Neue";
+    font-family: "HelveticaBlack";
+    font-family: "HelveticaHeavy";
+    font-family: "HelveticaLight";
+    font-family: "HelveticaUltraLight";
+    font-family: "HelveticaMedium";
+    font-family: "HelveticaNeue-Light";
+    font-family: "HelveticaRegular";
+    font-family: "HelveticaThin";
+
+    font-family: "HelveticaBlackItalic";
+    font-family: "HelveticaBoldItalic";
+    font-family: "HelveticaHeavyItalic";
+    font-family: "HelveticaItalic";
+    font-family: "HelveticaLightItalic";
+    font-family: "HelveticaUltraLightItalic";
+    font-family: "HelveticaMediumItalic";
+    font-family: "HelveticaThinItalic";
+    font-family: "HelveticaUltraLightItalic";
+}
+
+/* tasks-board > */
+
+h1 {
+    max-height: 3.3em;
+    overflow: hidden;
+    text-align: center;
+    font-family: HelveticaUltraLight;
+}
+
+.task-board {
+    width: 100%;
+    background-color: white;
+}
+
+.tasks-block-priority {
+    height: 4px;
+    background-color: black;
+}
+
+.task-block-icons {
+    text-align: left;
+    float: left;
+}
+
+.task-block-icons i {
+    width: 0.9em;
+    cursor: pointer;
+    font-size: 18px;
+    color: #000000;
+}
+
+.task-block-icons i:hover{
+    color: #337AB7;
+}
+
+.align-right {
+    float: right;
+}
+
+.task-board, .task-board th, .task-board td {
+    padding: 5px;
+    border: 1px solid darkgrey;
+}
+
+.task-board thead th {
+    position: relative;
+    font-size: 20px;
+    font-family: "HelveticaThin";
+}
+
+.task-board thead th .fa {
+    position: absolute;
+    cursor: pointer;
+    color: black;
+}
+
+.task-board thead th .fa-plus {
+    top: 0.5em;
+    right: 0.5em;
+}
+
+.task-board thead th .fa-bars {
+    top: 0.5em;
+    left: 0.5em;
+}
+
+.task-board thead th .fa:hover {
+    color: #337AB7;
+}
+
+.task-board th {
+    width: 33%;
+    text-align: center;
+    vertical-align: top;
+}
+
+.blue.task-block {
+    background-color: #E9EDF7;
+}
+
+.blue.task-block .tasks-block-priority {
+    background-color: blue;
+}
+
+.green.task-block {
+    background-color: #EAF7EA;
+}
+
+.green.task-block .tasks-block-priority {
+    background-color: #008000;
+}
+
+.red.task-block {
+    background-color: #FFEEEE;
+}
+
+.red.task-block .tasks-block-priority {
+    background-color: red;
+}
+
+.task-block {
+    display: inline-block;
+    width: 95%;
+    margin: 5px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1100px) {
+    .task-block {
+        width: 45%;
+    }
+}
+
+@media (min-width: 1600px) {
+    .task-block {
+        width: 30%;
+    }
+}
+
+.task-block-content {
+    border: 1px solid #ccc;
+    border-top: none;
+    padding: 5px;
+}
+
+.tasks-block-title {
+    height: 6em;
+    margin-bottom: 5px;
+    font-family: "HelveticaLight";
+    font-size: 15px;
+    line-height: 1.2em;
+    font-weight: 300;
+    text-align: left;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.tasks-block-executor {
+    height: 2em;
+    overflow: hidden;
+    font-size: 14px;
+    font-family: "HelveticaRegular";
+    text-align: right;
+    line-height: 2em;
+}
+
+.tasks-block-progress-bar {
+    height: 10%;
+}
+
+.tasks-block-progress-bar:after,  .tasks-block-progress-bar:before {
+    display: table;
+    content: "";
+    clear: both;
+}
+
+.progress {
+    height: 10px;
+    margin-bottom: 0;
+}
+
+.progress-bar {
+    color: #000;
+    font-size: 10px;
+    line-height: 10px;
+
+    background-image: -webkit-linear-gradient(top,#7CF57C 0,#46B346 100%);
+    background-image: -o-linear-gradient(top,#7CF57C 0,#46B346 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#7CF57C),to(#46B346));
+    background-image: linear-gradient(to bottom,#7CF57C 0,#46B346 100%);
+}
+
+/* < tasks-board */
+
+/* projects-board > */
+
+.project-block {
+    position: relative;
+    float: left;
+    width: 98%;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+@media (min-width: 900px) {
+    .project-block {
+        width: 48%;
+    }
+}
+
+@media (min-width: 1300px) {
+    .project-block {
+        width: 32%;
+    }
+}
+
+@media (min-width: 1800px) {
+    .project-block {
+        width: 24%;
+    }
+}
+
+.project-block-settings-icon {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0.5em;
+    font-size: 20px;
+    cursor: pointer;
+    color: black;
+}
+
+.project-block-settings-icon:hover {
+    color: #337AB7;
+}
+
+.project-block-content {
+    padding: 10px;
+}
+
+.project-block-title {
+    height: 2.6em;
+    margin-bottom: 20px;
+    overflow: hidden;
+    line-height: 1.3em;
+    text-align: left;
+    font-size: 20px;
+    font-family: "HelveticaLight";
+}
+
+.statistics {
+    padding-left: 40px;
+}
+
+.statistics li {
+    font-family: "HelveticaRegular";
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+}
+
+.statistics-participants-title {
+    width: 80px;
+    float: left;
+}
+
+.statistics-participants-value {
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.new_project_block {
+    cursor: pointer;
+}
+
+.new_project_icon {
+    text-align: center;
+    font-size: 72px;
+    color: #337ab7;
+    line-height: 1em;
+    margin: 10px 0 0 0;
+}
+
+.new_project_title {
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 2em;
+    height: 2em;
+}
+
+.new_project_block:hover .new_project_icon {
+    color: #23527c;
+}
+
+.new_project_block a:hover {
+    text-decoration: none !important;
+}
+
+/* < projects-board */
+
+/* project-add_edit > */
+
+.edit-jumb {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+@media screen and (min-width: 768px) {
+    .edit-jumb {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 30px;
+    }
+}
+
+.control-label {
+    font-family: "HelveticaRegular";
+    font-size: 17px;
+    font-weight: normal;
+}
+
+.form-control {
+    font-size: 15px;
+    font-family: "HelveticaLight";
+    letter-spacing: 0.1px;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+/* project-add_edit < */

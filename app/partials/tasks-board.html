@@ -1,0 +1,109 @@
+<h1>{{title}}</h1>
+<table class="task-board">
+    <thead>
+        <tr>
+            <th>
+                Planned
+                <i class="fa fa-bars" style="display: {{(checkedN == 0) ? 'none' : 'block'}}"></i>
+                <a href="#/{{title}}/{{projectID}}/newtask"><i class="fa fa-plus"></i></a>
+            </th>
+            <th>TODO</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>
+                <div class="task-block {{task.priority}}" ng-repeat="task in tasks | filter: { status: 'planned' }">
+                    <div class="tasks-block-priority"></div>
+                    <div class="task-block-content">
+                        <div class="clearfix">
+                            <div class="task-block-icons">
+                                <i ng-click="click(task)" class="fa {{task.checked ? 'fa-check-square' : 'fa-square-o'}}"></i>
+                                <a href="#/{{title}}/{{projectID}}/edittask/{{task.id}}"><i class="fa fa-cog"></i></a>
+                            </div>
+                            <div class="task-block-icons align-right">
+                                <i ng-click="status(task, 'todo')" class="fa fa-arrow-circle-o-right"></i>
+                            </div>
+                        </div>
+                        <div class="tasks-block-title">
+                            {{task.title}}
+                        </div>
+                        <div class="tasks-block-executor">
+                            {{task.name}}
+                        </div>
+                        <div class="tasks-block-progress-bar">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{task.progress}}" aria-valuemin="0" aria-valuemax="100"
+                                     style="width: {{task.progress + '%'}}">
+                                    {{task.progress}}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="task-block {{task.priority}}" ng-repeat="task in tasks | filter: { status: 'todo' }">
+                    <div class="tasks-block-priority"></div>
+                    <div class="task-block-content">
+                        <div class="clearfix">
+                            <div class="task-block-icons">
+                                <i ng-click="click(task)" class="{{task.checked ? 'fa fa-check-square' : 'fa fa-square-o'}}"></i>
+                                <a href="#/{{title}}/{{projectID}}/edittask/{{task.id}}"><i class="fa fa-cog"></i></a>
+                            </div>
+                            <div class="task-block-icons align-right">
+                                <i ng-click="status(task, 'planned')" class="fa fa-arrow-circle-o-left"></i>
+                                <i ng-click="status(task, 'done')" class="fa fa-arrow-circle-o-right"></i>
+                            </div>
+                        </div>
+                        <div class="tasks-block-title">
+                            {{task.title}}
+                        </div>
+                        <div class="tasks-block-executor">
+                            {{task.name}}
+                        </div>
+                        <div class="tasks-block-progress-bar">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{task.progress}}" aria-valuemin="0" aria-valuemax="100"
+                                     style='{{"width: " + task.progress + "%"}}'>
+                                    {{task.progress}}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+            <th>
+                <div class="task-block {{task.priority}}" ng-repeat="task in tasks | filter: { status: 'done' }">
+                    <div class="tasks-block-priority"></div>
+                    <div class="task-block-content">
+                        <div class="clearfix">
+                            <div class="task-block-icons">
+                                <i ng-click="click(task)" class="{{task.checked ? 'fa fa-check-square' : 'fa fa-square-o'}}"></i>
+                                <a href="#/{{title}}/{{projectID}}/edittask/{{task.id}}"><i class="fa fa-cog"></i></a>
+                            </div>
+                            <div class="task-block-icons align-right">
+                                <i ng-click="status(task, 'todo')" class="fa fa-arrow-circle-o-left"></i>
+                            </div>
+                        </div>
+                        <div class="tasks-block-title">
+                            {{task.title}}
+                        </div>
+                        <div class="tasks-block-executor">
+                            {{task.name}}
+                        </div>
+                        <div class="tasks-block-progress-bar">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{task.progress}}" aria-valuemin="0" aria-valuemax="100"
+                                     style='{{"width: " + task.progress + "%"}}'>
+                                    {{task.progress}}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th>
+        </tr>
+    </tbody>
+</table>
