@@ -1,36 +1,15 @@
-<div class="project-container">
-    <div class="project-block new_project_block">
-        <a href="#/newproject">
-            <div class="project-block-content">
-                <div class="new_project_icon">
-                    <i class="fa fa-plus"></i>
-                </div>
-                <div class="project-block-title new_project_title">
-                    New project
-                </div>
-            </div>
-        </a>
-    </div>
-    <div class="project-block" ng-repeat="project in projects">
-        <div class="project-block-content">
-            <a href="#/editproject/{{project.id}}"><i class="fa fa-cog project-block-settings-icon"></i></a>
-            <div class="project-block-title">
-                <a href="#/{{project.title}}/{{project.id}}/tasks">{{project.title}}</a>
-            </div>
-            <ul class="statistics">
-                <li>
-                    <div class="statistics-participants-title">Created by:</div>
-                    <div class="statistics-participants-value"><span>{{project.name}}</span></div>
-                </li>
-                <li>
-                    <div class="statistics-participants-title">Last update:</div>
-                    <div class="statistics-participants-value"><span>{{project.updateDate | date: 'dd MMMM yy HH:mm'}}</span></div>
-                </li>
-                <li>
-                    <div class="statistics-participants-title">Participants:</div>
-                    <div class="statistics-participants-value"><span>{{project.participants}}</span></div>
-                </li>
-            </ul>
+<div class="edit-jumb jumbotron">
+    <form name="myForm">
+        <div class="form-group" ng-class="{'has-error': myForm.title.$invalid}">
+            <label class="control-label" for="projectTitle">Project title</label>
+            <input class="form-control" type="text" name="title" ng-minlength="2" ng-maxlength="200" ng-model="project.title" id="projectTitle" placeholder="My project" required>
         </div>
-    </div>
+        <div class="form-group">
+            <label class="control-label" for="projectDescription">Description</label>
+            <textarea class="form-control" type="text" ng-model="project.description" id="projectDescription"></textarea>
+        </div>
+        <a href="#/" class="btn btn-default">Cancel</a>
+        <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="myForm.$invalid">Save</button>
+        <button type="button" class="btn btn-danger" ng-click="delete()" ng-show="project.id">Delete</button>
+    </form>
 </div>

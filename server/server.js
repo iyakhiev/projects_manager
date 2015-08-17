@@ -17,6 +17,7 @@ app.post('/getuser', function(req, res) {
 
 app.post('/getproject', function(req, res) {
     db.getProject(req.body, function (data) {
+        data.headers = req.headers;
         res.send(data)
     });
 });

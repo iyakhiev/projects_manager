@@ -21,10 +21,21 @@ var postFunction = function($http, url, data, successCallback, errorCallback) {
         });
 };
 
-projectsManagerCtrls.controller('SignInCtrl', ['$scope', '$http',
+projectsManagerCtrls.controller('LoginCtrl', ['$scope', '$http', '$cookieStore',
+    function($scope, $http, $cookieStore) {
+        $scope.form = {};
+        $scope.login = function () {
+            //$cookieStore.put("globals", {
+            //    id: 2,
+            //    currentUser: "isa"
+            //});
+        };
+    }]);
+
+projectsManagerCtrls.controller('RegisterCtrl', ['$scope', '$http',
     function($scope, $http) {
-        $scope.signin = {};
-        $scope.signin = function () {
+        $scope.form = {};
+        $scope.register = function () {
 
         };
     }]);
