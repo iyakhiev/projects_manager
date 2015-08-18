@@ -12,7 +12,7 @@
         <link rel="icon" href="imgs/favicon.ico" type="image/x-icon">
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="NavCtrl">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -38,14 +38,14 @@
                                 <!--<li><a href="#/projects">All projects</a></li>-->
                             <!--</ul>-->
                         <!--</li>-->
-                        <li class="dropdown">
+                        <li class="dropdown" ng-show="user.name">
                             <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Isa Yakhiev
+                                {{user.name}}
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="">Profile</a></li>
-                                <li><a href="">Log out</a></li>
+                                <li><a ng-click="logout()" href="">Log out</a></li>
                             </ul>
                         </li>
                     </ul>

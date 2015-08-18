@@ -8,6 +8,30 @@ var pool = mysql.createPool({
     database: config.db.db
 });
 
+var addUser = function(data, callback) {
+    getConnection(function (err, connection) {
+        if (err) {
+            callback({"id": "-1", "code": err.code});
+            return;
+        }
+
+        connection.query("INSERT INTO `projects_manager`.`pm_users` (`name`, `mail`, `password`) " +
+            "VALUES ('" + data.userName + "', '" + data.mail + "', '" + data.password + "');",
+            function (err, rows) {
+                if (err) {
+                    callback({"id": "-1", "code": err.code});
+                    connection.release();
+                    return;
+                }
+
+                callback({id: rows.insertId});
+                connection.release();
+                return;
+            });
+
+    });
+};
+
 var getUser = function(data, callback) {
     getConnection(function (err, connection) {
         if (err) {
@@ -15,7 +39,12 @@ var getUser = function(data, callback) {
             return;
         }
 
-        connection.query("SELECT * FROM pm_users" + (data.id > 0 ? ("WHERE id = " + data.id) : "") + ";",
+        var query = (data.mail != undefined) ?
+        "SELECT * FROM pm_users WHERE mail = '" + data.mail + "';"
+            :
+        "SELECT * FROM pm_users" + (data.id > 0 ? ("WHERE id = " + data.id) : "") + ";";
+
+        connection.query(query,
             function (err, rows) {
                 if (err) {
                     callback({"id": "-1", "code": err.code});
@@ -291,4 +320,5 @@ module.exports.updateTask = updateTask;
 module.exports.deleteTask = deleteTask;
 module.exports.addTask = addTask;
 module.exports.getTask = getTask;
+module.exports.addUser = addUser;
 module.exports.getUser = getUser;

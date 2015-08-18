@@ -8,8 +8,13 @@
             <label class="control-label" for="projectDescription">Description</label>
             <textarea class="form-control" type="text" ng-model="project.description" id="projectDescription"></textarea>
         </div>
-        <a href="#/" class="btn btn-default">Cancel</a>
-        <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="myForm.$invalid">Save</button>
-        <button type="button" class="btn btn-danger" ng-click="delete()" ng-show="project.id">Delete</button>
+        <div class="controls clearfix">
+            <a href="#/" class="control-element btn btn-default"  ng-disabled="project.loading">Cancel</a>
+            <button type="button" class="control-element btn btn-primary" ng-click="save()" ng-disabled="myForm.$invalid || project.loading">Save</button>
+            <button type="button" class="control-element btn btn-danger" ng-click="delete()" ng-show="project.id"  ng-disabled="project.loading">Delete</button>
+            <div class="control-element" ng-show="project.loading">
+                <i class="fa fa-cog fa-spin"></i>
+            </div>
+        </div>
     </form>
 </div>

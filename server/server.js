@@ -9,6 +9,12 @@ app.use(express.static(path.join(__dirname, '../app')));
 app.listen(config.port);
 app.use(bodyParser.json());
 
+app.post('/adduser', function(req, res) {
+    db.addUser(req.body, function (data) {
+        res.send(data)
+    });
+});
+
 app.post('/getuser', function(req, res) {
     db.getUser(req.body, function (data) {
         res.send(data)
@@ -17,7 +23,6 @@ app.post('/getuser', function(req, res) {
 
 app.post('/getproject', function(req, res) {
     db.getProject(req.body, function (data) {
-        data.headers = req.headers;
         res.send(data)
     });
 });

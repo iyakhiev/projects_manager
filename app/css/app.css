@@ -341,6 +341,22 @@ h1 {
     text-decoration: none !important;
 }
 
+.controls {
+    position: relative;
+}
+
+.control-element {
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+.control-element i {
+    position: absolute;
+    top: 50%;
+    margin-top: -0.5em;
+    font-size: 26px;
+}
+
 /* < projects-board */
 
 /* project-add_edit > */

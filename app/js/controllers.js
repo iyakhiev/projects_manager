@@ -1,6 +1,5 @@
-'use strict'
+'use strict';
 
-var userID = 1;
 var projectsManagerCtrls = angular.module('projectsManagerCtrls', []);
 
 var postFunction = function($http, url, data, successCallback, errorCallback) {
@@ -21,50 +20,121 @@ var postFunction = function($http, url, data, successCallback, errorCallback) {
         });
 };
 
-projectsManagerCtrls.controller('LoginCtrl', ['$scope', '$http', '$cookieStore',
-    function($scope, $http, $cookieStore) {
-        $scope.form = {};
-        $scope.login = function () {
-            //$cookieStore.put("globals", {
-            //    id: 2,
-            //    currentUser: "isa"
-            //});
-        };
-    }]);
+var checkUser = function($http, $cookieStore, $location, $rootScope, auth, callback) {
+    postFunction($http, '/getuser', {"mail": auth.mail}, function (data) {
+        callback(data);
+    });
+};
 
-projectsManagerCtrls.controller('RegisterCtrl', ['$scope', '$http',
-    function($scope, $http) {
-        $scope.form = {};
-        $scope.register = function () {
+projectsManagerCtrls.controller('NavCtrl', ['$scope', '$rootScope', '$cookieStore', '$location',
+    function($scope, $rootScope, $cookieStore, $location) {
+        $scope.user = $rootScope.globals;
 
-        };
-    }]);
-
-projectsManagerCtrls.controller('ProjectsBoardCtrl', ['$scope', '$http',
-    function($scope, $http) {
-        postFunction($http, '/getproject', {"userId": userID, "id": "0"}, function (data) {
-            console.log(data);
-            $scope.projects = data.rows;
+        $scope.$on('login', function() {
+            $scope.user = $rootScope.globals;
         });
+
+        $scope.logout = function() {
+            $scope.user = {};
+            $rootScope.globals = {};
+            $cookieStore.remove("globals");
+            $location.path('/login');
+        }
     }]);
 
-projectsManagerCtrls.controller('NewProjectCtrl', ['$scope', '$location', '$http',
-    function($scope, $location, $http) {
-        $scope.save = function () {
-            postFunction($http, '/newproject', {
-                "title": $scope.project.title,
-                "description": ($scope.project.description || ""),
-                "creatorId": userID
-            }, function (data) {
-                $location.path('/projects');
-                //$location.path('/' + data.id + '/tasks')
+projectsManagerCtrls.controller('LoginCtrl', ['$scope', '$http', '$cookieStore', '$location', '$rootScope',
+    function($scope, $http, $cookieStore, $location, $rootScope) {
+        $scope.auth = {
+            loading: false,
+            wrongPass: false,
+            notRegistered: false
+        };
+
+        $scope.login = function () {
+            $scope.auth.loading = true;
+            checkUser($http, $cookieStore, $location, $rootScope, $scope.auth, function(data) {
+                if(data.rows && data.rows.length == 1) {
+                    $scope.auth.notRegistered = false;
+                    if($scope.auth.password == data.rows[0].password) {
+                        $cookieStore.put("globals", {
+                            id: data.rows[0].id,
+                            name: data.rows[0].name
+                        });
+                        $rootScope.globals = $cookieStore.get('globals') || {};
+                        $rootScope.$broadcast('login');
+                        $scope.auth.wrongPass = false;
+                        $location.path('/projects');
+                    } else {
+                        $scope.auth.wrongPass = true;
+                    }
+                } else {
+                    $scope.auth.notRegistered = true;
+                }
+                $scope.auth.loading = false;
             });
         };
     }]);
 
-projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$http', '$location',
-    function($scope, $routeParams, $http, $location) {
-        postFunction($http, '/getproject', {"userId": userID, "id": $routeParams["projectID"]}, function (data) {
+projectsManagerCtrls.controller('RegisterCtrl', ['$scope', '$http', '$cookieStore', '$location', '$rootScope',
+    function($scope, $http, $cookieStore, $location, $rootScope) {
+        $scope.userInfo = {
+            loading: false,
+            "mailRegistered": false
+        };
+
+        $scope.register = function () {
+            $scope.userInfo.loading = true;
+            checkUser($http, $cookieStore, $location, $rootScope, $scope.userInfo, function(data) {
+                if(data.rows && data.rows.length == 0) {
+                    $scope.userInfo.mailRegistered = false;
+                    postFunction($http, '/adduser', $scope.userInfo, function (data) {
+                        $cookieStore.put("globals", {
+                            id: data.id,
+                            name: $scope.userInfo.userName
+                        });
+                        $rootScope.globals = $cookieStore.get('globals') || {};
+                        $rootScope.$broadcast('login');
+                        $location.path('/projects');
+                    });
+                } else {
+                    $scope.userInfo.mailRegistered = true;
+                    $scope.userInfo.loading = false;
+                }
+            });
+        };
+    }]);
+
+projectsManagerCtrls.controller('ProjectsBoardCtrl', ['$scope', '$http', '$rootScope',
+    function($scope, $http, $rootScope) {
+        postFunction($http, '/getproject', {"userId": $rootScope.globals.id, "id": "0"}, function (data) {
+            console.log("projects:", data);
+            $scope.projects = data.rows;
+        });
+    }]);
+
+projectsManagerCtrls.controller('NewProjectCtrl', ['$scope', '$location', '$http', '$rootScope',
+    function($scope, $location, $http, $rootScope) {
+        $scope.project = {
+            loading: false
+        };
+        $scope.save = function () {
+            $scope.project.loading = true;
+            postFunction($http, '/newproject', {
+                "title": $scope.project.title,
+                "description": ($scope.project.description || ""),
+                "creatorId": $rootScope.globals.id
+            }, function (data) {
+                $location.path('/projects');
+            });
+        };
+    }]);
+
+projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$http', '$location', '$rootScope',
+    function($scope, $routeParams, $http, $location, $rootScope) {
+        $scope.project = {
+            loading: false
+        };
+        postFunction($http, '/getproject', {"userId": $rootScope.globals.id, "id": $routeParams["projectID"]}, function (data) {
             if (data.rows.length == 1) {
                 $scope.project = data.rows[0];
             } else {
@@ -73,6 +143,7 @@ projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$
         });
 
         $scope.save = function () {
+            $scope.project.loading = true;
             postFunction($http, '/updateproject', {
                     "title": $scope.project.title,
                     "description": $scope.project.description || "",
@@ -84,6 +155,7 @@ projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$
         };
 
         $scope.delete = function () {
+            $scope.project.loading = true;
             postFunction($http, '/deleteproject', {"id": $routeParams["projectID"]}, function (data) {
                 if (data.id == "-1") {
                     console.log(data);
@@ -94,12 +166,13 @@ projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$
         };
     }]);
 
-projectsManagerCtrls.controller('NewTaskCtrl', ['$scope', '$http', '$routeParams', '$location',
-    function($scope, $http, $routeParams, $location) {
+projectsManagerCtrls.controller('NewTaskCtrl', ['$scope', '$http', '$routeParams', '$location', '$rootScope',
+    function($scope, $http, $routeParams, $location, $rootScope) {
         $scope.priority = [{color: 'normal'}, {color: 'green'}, {color: 'blue'}, {color: 'red'}];
         $scope.projectID = $routeParams['projectID'] || "";
         $scope.title = $routeParams['projectTitle'] || "";
         $scope.task = {
+            loading: false,
             plannedCapacity: 0,
             actualCapacity: 0,
             priority: $scope.priority[0].color
@@ -111,7 +184,8 @@ projectsManagerCtrls.controller('NewTaskCtrl', ['$scope', '$http', '$routeParams
         });
 
         $scope.save = function () {
-            $scope.task.creatorId = userID;
+            $scope.task.loading = true;
+            $scope.task.creatorId = $rootScope.globals.id;
             $scope.task.projectId = $scope.projectID;
             $scope.task.description = $scope.task.description || "";
             $scope.task.status = 'planned';
@@ -129,6 +203,9 @@ projectsManagerCtrls.controller('EditTaskCtrl', ['$scope', '$http', '$routeParam
         $scope.title = $routeParams['projectTitle'] || "";
         $scope.taskID = $routeParams['taskID'] || "";
         $scope.users = [];
+        $scope.task = {
+            loading: false
+        };
 
         postFunction($http, '/getuser', {}, function (data) {
             $scope.users = data.rows;
@@ -143,12 +220,14 @@ projectsManagerCtrls.controller('EditTaskCtrl', ['$scope', '$http', '$routeParam
         });
 
         $scope.save = function () {
+            $scope.task.loading = true;
             postFunction($http, '/updatetask', $scope.task, function (data) {
                 $location.path('/' + $scope.title + '/' + $scope.projectID + '/tasks');
             });
         };
 
         $scope.delete = function () {
+            $scope.task.loading = true;
             postFunction($http, '/deletetask', {id: $scope.taskID}, function (data) {
                 $location.path('/' + $scope.title + '/' + $scope.projectID + '/tasks');
             });

@@ -46,24 +46,21 @@ projectsManager.config(['$routeProvider', function($routeProvider) {
 }]);
 
 projectsManager.run(['$rootScope', '$location', '$cookieStore', '$http', function($rootScope, $location, $cookieStore, $http) {
-    $cookieStore.put("globals", {
-        id: 2,
-        currentUser: "isa"
-    });
-
     $rootScope.globals = $cookieStore.get('globals') || {};
-    if ($rootScope.globals.currentUser) {
-        $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser; // jshint ignore:line
+    if ($rootScope.globals.name) {
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.name; // jshint ignore:line
     }
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) {
         var restrictedPage = $.inArray($location.path(), ['/login', '/register']) === -1;
-        var loggedIn = $rootScope.globals.currentUser;
+        var loggedIn = $rootScope.globals.name;
 
         if (restrictedPage && !loggedIn) {
+            console.log('go to login', $cookieStore.get('globals'));
             $location.path('/login');
         }
         if(!restrictedPage && loggedIn) {
+            console.log('go to projects', $cookieStore.get('globals'));
             $location.path('/projects');
         }
     });

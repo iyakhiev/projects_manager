@@ -24,8 +24,13 @@
             <label class="control-label" for="taskDescription">Description</label>
             <textarea type="text" class="form-control" ng-model="task.description" id="taskDescription"></textarea>
         </div>
-        <a href="#/{{title}}/{{projectID}}/tasks" class="btn btn-default">Cancel</a>
-        <button type="button" class="btn btn-primary" ng-click="save()" ng-disabled="myForm.$invalid">Save</button>
-        <button type="button" class="btn btn-danger" ng-click="delete()" ng-show="task.id">Delete</button>
+        <div class="controls clearfix">
+            <a href="#/{{title}}/{{projectID}}/tasks" class="control-element btn btn-default"  ng-disabled="task.loading">Cancel</a>
+            <button type="button" class="control-element btn btn-primary" ng-click="save()" ng-disabled="myForm.$invalid || task.loading">Save</button>
+            <button type="button" class="control-element btn btn-danger" ng-click="delete()" ng-show="task.id"  ng-disabled="task.loading">Delete</button>
+            <div class="control-element" ng-show="task.loading" ng-disabled="task.loading">
+                <i class="fa fa-cog fa-spin"></i>
+            </div>
+        </div>
     </form>
 </div>
