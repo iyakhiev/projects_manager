@@ -4,6 +4,32 @@
             <label class="control-label" for="projectTitle">Project title</label>
             <input class="form-control" type="text" name="title" ng-minlength="2" ng-maxlength="200" ng-model="project.title" id="projectTitle" placeholder="My project" required>
         </div>
+        <div class="form-group"  ng-class="{'has-error': myForm.participant.$invalid}">
+            <label class="control-label" for="projectParticipants">Participants</label>
+            <div class="row">
+                <div class="col-sm-6 participants-block">
+                    <div class="input-group">
+                        <input class="container form-control" type="email" name="participant" ng-model="project.participant" id="projectParticipants" placeholder="user@mail.com">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" ng-click="addParticipant(project.participant)">
+                                <i class="fa fa-user-plus"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-sm-6 participants-block">
+                    <div class="list-group scroll">
+                        <a href="" class="list-group-item" ng-show="!project.participants.length">
+                            participant@mail.com
+                        </a>
+                        <a href="" class="list-group-item" ng-repeat="mail in project.participants">
+                            {{mail}}
+                            <i class="fa fa-times" ng-click="removeParticipant(mail)"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group">
             <label class="control-label" for="projectDescription">Description</label>
             <textarea class="form-control" type="text" ng-model="project.description" id="projectDescription"></textarea>

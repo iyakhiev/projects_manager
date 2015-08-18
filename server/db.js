@@ -1,5 +1,5 @@
 var mysql = require('mysql'),
-    config = require('./config');
+    config = require('./config2');
 
 var pool = mysql.createPool({
     host: config.db.host,
@@ -8,6 +8,21 @@ var pool = mysql.createPool({
     database: config.db.db
 });
 
+var escape = {
+    exp : /["'\\]/g,
+    map: {
+        '"': '\\\"',
+        "'": "\\'",
+        '\\': ('\\\\')
+    }
+};
+
+String.prototype.escape = function() {
+    return String(this).replace(escape.exp, function (s) {
+        return escape.map[s];
+    });
+};
+
 var addUser = function(data, callback) {
     getConnection(function (err, connection) {
         if (err) {
@@ -15,7 +30,7 @@ var addUser = function(data, callback) {
             return;
         }
 
-        connection.query("INSERT INTO `projects_manager`.`pm_users` (`name`, `mail`, `password`) " +
+        connection.query("INSERT INTO `pm_users` (`name`, `mail`, `password`) " +
             "VALUES ('" + data.userName + "', '" + data.mail + "', '" + data.password + "');",
             function (err, rows) {
                 if (err) {
@@ -76,7 +91,9 @@ var getProject = function(data, callback) {
         var queryForAll =
             "SELECT * FROM " +
                 "(SELECT * FROM " +
-                    "(SELECT * FROM pm_projects WHERE (id in (SELECT projectId FROM pm_project_participants WHERE userId = " + data.userId + ") OR creatorId = " + data.userId + ")) as t1 " +
+                    "(SELECT * FROM pm_projects WHERE " +
+                        "(id in (SELECT projectId FROM pm_project_participants WHERE userId = " + data.userId + ") " +
+                        "OR creatorId = " + data.userId + ")) as t1 " +
                 "LEFT JOIN " +
                     "(SELECT id as uid, name FROM pm_users) as t2 " +
                 "ON t1.creatorId = t2.uid) as t5 " +
@@ -88,7 +105,7 @@ var getProject = function(data, callback) {
                         "(SELECT id as uid, name FROM pm_users) as t4 " +
                     "ON t3.userId = t4.uid) as t1 " +
                 "GROUP BY projectId) as t6 " +
-            "ON t5.id = t6.projectId;";
+            "ON t5.id = t6.projectId ORDER by t5.id DESC;";
 
         var queryForOne = "SELECT * FROM pm_projects WHERE " +
             "(id in (SELECT projectId FROM pm_project_participants WHERE userId = " + data.userId + ") OR creatorId = " + data.userId + ") " +
@@ -150,7 +167,7 @@ var updateProject = function(data, callback) {
             return;
         }
 
-        connection.query("UPDATE pm_projects SET `title`='" + data.title + "', `description`='" + data.description + "' " +
+        connection.query("UPDATE pm_projects SET `title`='" + data.title.escape() + "', `description`='" + data.description.escape() + "' " +
             "WHERE `id`='" + data.id + "';",
             function (err, rows) {
                 if (err) {
@@ -173,9 +190,8 @@ var addProject = function(data, callback) {
             callback({"id": "-1", "code": err.code});
             return;
         }
-
         connection.query("INSERT INTO `pm_projects` (`title`, `description`, `creatorId`, `creationDate`, `updateDate` ) " +
-            "VALUES ('" + data.title + "', '" + data.description + "', '" + data.creatorId + "', NOW(), NOW());",
+            "VALUES ('" + data.title.escape() + "', '" + data.description.escape() + "', '" + data.creatorId + "', NOW(), NOW());",
             function (err, rows) {
                 if (err) {
                     callback({"id": "-1", "code": err.code});

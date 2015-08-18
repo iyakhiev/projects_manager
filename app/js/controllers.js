@@ -78,6 +78,7 @@ projectsManagerCtrls.controller('LoginCtrl', ['$scope', '$http', '$cookieStore',
 projectsManagerCtrls.controller('RegisterCtrl', ['$scope', '$http', '$cookieStore', '$location', '$rootScope',
     function($scope, $http, $cookieStore, $location, $rootScope) {
         $scope.userInfo = {
+            error: false,
             loading: false,
             "mailRegistered": false
         };
@@ -85,20 +86,27 @@ projectsManagerCtrls.controller('RegisterCtrl', ['$scope', '$http', '$cookieStor
         $scope.register = function () {
             $scope.userInfo.loading = true;
             checkUser($http, $cookieStore, $location, $rootScope, $scope.userInfo, function(data) {
-                if(data.rows && data.rows.length == 0) {
-                    $scope.userInfo.mailRegistered = false;
-                    postFunction($http, '/adduser', $scope.userInfo, function (data) {
-                        $cookieStore.put("globals", {
-                            id: data.id,
-                            name: $scope.userInfo.userName
-                        });
-                        $rootScope.globals = $cookieStore.get('globals') || {};
-                        $rootScope.$broadcast('login');
-                        $location.path('/projects');
-                    });
-                } else {
-                    $scope.userInfo.mailRegistered = true;
+                console.log("reg:", data);
+                if(data.id == "-1") {
                     $scope.userInfo.loading = false;
+                    $scope.userInfo.error = true;
+                } else {
+                    $scope.userInfo.error = false;
+                    if (data.rows && data.rows.length == 0) {
+                        $scope.userInfo.mailRegistered = false;
+                        postFunction($http, '/adduser', $scope.userInfo, function (data) {
+                            $cookieStore.put("globals", {
+                                id: data.id,
+                                name: $scope.userInfo.userName
+                            });
+                            $rootScope.globals = $cookieStore.get('globals') || {};
+                            $rootScope.$broadcast('login');
+                            $location.path('/projects');
+                        });
+                    } else {
+                        $scope.userInfo.mailRegistered = true;
+                        $scope.userInfo.loading = false;
+                    }
                 }
             });
         };
@@ -115,17 +123,41 @@ projectsManagerCtrls.controller('ProjectsBoardCtrl', ['$scope', '$http', '$rootS
 projectsManagerCtrls.controller('NewProjectCtrl', ['$scope', '$location', '$http', '$rootScope',
     function($scope, $location, $http, $rootScope) {
         $scope.project = {
-            loading: false
+            loading: false,
+            participants: ['isa.ya@mail.ru',
+                'isa.yaa@mail.ru',
+                'isa.yahiev@gmail.com',
+                'isa.yakhiev@gmail.com',
+                'iyakhiev@yandex.ru']
         };
         $scope.save = function () {
             $scope.project.loading = true;
             postFunction($http, '/newproject', {
                 "title": $scope.project.title,
                 "description": ($scope.project.description || ""),
+                "participants": $scope.project.participants,
                 "creatorId": $rootScope.globals.id
             }, function (data) {
                 $location.path('/projects');
             });
+        };
+
+        $scope.addParticipant = function() {
+            var index = $scope.project.participants.indexOf($scope.project.participant);
+            if(index < 0) {
+                $scope.project.participants.push($scope.project.participant);
+            }
+            $scope.project.participant = "";
+        };
+
+        $scope.removeParticipant = function(mail) {
+            var index = $scope.project.participants.indexOf(mail);
+            if(index > -1) {
+                setTimeout(function() {
+                    $scope.project.participants.splice(index, 1);
+                    $scope.$apply();
+                }, 1 );
+            }
         };
     }]);
 
@@ -134,9 +166,15 @@ projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$
         $scope.project = {
             loading: false
         };
-        postFunction($http, '/getproject', {"userId": $rootScope.globals.id, "id": $routeParams["projectID"]}, function (data) {
+
+        postFunction($http, '/getproject', {
+            "userId": $rootScope.globals.id,
+            "id": $routeParams["projectID"]
+        }, function (data) {
             if (data.rows.length == 1) {
                 $scope.project = data.rows[0];
+                $scope.project.loading = false;
+                $scope.project.participants = [];
             } else {
                 $location.path('/projects')
             }
@@ -145,9 +183,10 @@ projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$
         $scope.save = function () {
             $scope.project.loading = true;
             postFunction($http, '/updateproject', {
+                    "id": $routeParams["projectID"],
                     "title": $scope.project.title,
-                    "description": $scope.project.description || "",
-                    "id": $routeParams["projectID"]
+                    "participants": $scope.project.participants,
+                    "description": $scope.project.description || ""
                 },
                 function (data) {
                     $location.path('/projects')
@@ -163,6 +202,24 @@ projectsManagerCtrls.controller('EditProjectCtrl', ['$scope', '$routeParams', '$
                     $location.path('/projects')
                 }
             });
+        };
+
+        $scope.addParticipant = function () {
+            var index = $scope.project.participants.indexOf($scope.project.participant);
+            if (index < 0) {
+                $scope.project.participants.push($scope.project.participant);
+            }
+            $scope.project.participant = "";
+        };
+
+        $scope.removeParticipant = function (mail) {
+            var index = $scope.project.participants.indexOf(mail);
+            if (index > -1) {
+                setTimeout(function () {
+                    $scope.project.participants.splice(index, 1);
+                    $scope.$apply();
+                }, 1);
+            }
         };
     }]);
 

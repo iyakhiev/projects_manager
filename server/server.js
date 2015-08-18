@@ -2,7 +2,7 @@ var express = require('express'),
     app = express(),
     path = require('path'),
     db = require('./db'),
-    config = require('./config'),
+    config = require('./config2'),
     bodyParser = require('body-parser');
 
 app.use(express.static(path.join(__dirname, '../app')));

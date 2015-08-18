@@ -26,7 +26,7 @@
                     <div class="statistics-participants-title">Last update:</div>
                     <div class="statistics-participants-value"><span>{{project.updateDate | date: 'dd MMMM yy HH:mm'}}</span></div>
                 </li>
-                <li>
+                <li style="{{ (project.participants) ? '' : 'opacity: 0'; }}">
                     <div class="statistics-participants-title">Participants:</div>
                     <div class="statistics-participants-value"><span>{{project.participants}}</span></div>
                 </li>
