@@ -1,9 +1,9 @@
 {
-    "port": 5000,
+    "port": 8000,
     "db": {
         "host": "localhost",
-        "db": "projects_manager",
-        "user": "root",
-        "password": "030193"
+        "db": "nigz",
+        "user": "isa",
+        "password": "12345678"
     }
 }
