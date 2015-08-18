@@ -1,5 +1,5 @@
 {
-    "port": 8000,
+    "port": 5000,
     "db": {
         "host": "localhost",
         "db": "projects_manager",
