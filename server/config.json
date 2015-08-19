@@ -1,9 +1,0 @@
-{
-    "port": 8000,
-    "db": {
-        "host": "localhost",
-        "db": "projects_manager",
-        "user": "root",
-        "password": "030193"
-    }
-}
