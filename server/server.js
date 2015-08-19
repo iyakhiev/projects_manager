@@ -10,7 +10,7 @@ app.listen(config.port, function() {
     console.log('on air');
 });
 app.use(bodyParser.json());
-
+a
 app.post('/adduser', function(req, res) {
     db.addUser(req.body, function (data) {
         res.send(data)
