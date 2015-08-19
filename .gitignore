@@ -3,5 +3,6 @@ logs/*
 node_modules/
 tmp
 .DS_Store
+/server/config.json
 .idea
 server/config.json
