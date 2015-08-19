@@ -18,15 +18,15 @@
                     </div>
                 </div>
                 <div class="col-sm-6 participants-block">
-                    <div class="list-group scroll">
-                        <a href="" class="list-group-item" ng-show="!project.participants.length">
+                    <ul class="list-group scroll">
+                        <li href="" class="list-group-item" ng-show="!project.participants.length">
                             participant@mail.com
-                        </a>
-                        <a href="" class="list-group-item" ng-repeat="mail in project.participants">
+                        </li>
+                        <li href="" class="list-group-item" ng-repeat="mail in project.participants">
                             {{mail}}
                             <i class="fa fa-times" ng-click="removeParticipant(mail)"></i>
-                        </a>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

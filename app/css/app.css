@@ -403,6 +403,7 @@ h1 {
 .participants-block .list-group {
     max-height: inherit;
     overflow: auto;
+    margin-bottom: 0;
 }
 
 .participants-block .list-group-item {
@@ -412,6 +413,7 @@ h1 {
 
 .participants-block .list-group-item i {
     float: right;
+    cursor: pointer;
     font-size: 1.4em;
 }
 

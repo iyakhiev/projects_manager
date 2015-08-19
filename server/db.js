@@ -1,5 +1,5 @@
 var mysql = require('mysql'),
-    config = require('./config2');
+    config = require('./config');
 
 var pool = mysql.createPool({
     host: config.db.host,
@@ -31,7 +31,7 @@ var addUser = function(data, callback) {
         }
 
         connection.query("INSERT INTO `pm_users` (`name`, `mail`, `password`) " +
-            "VALUES ('" + data.userName + "', '" + data.mail + "', '" + data.password + "');",
+            "VALUES ('" + data.userName.escape() + "', '" + data.mail + "', '" + data.password + "');",
             function (err, rows) {
                 if (err) {
                     callback({"id": "-1", "code": err.code});
@@ -215,7 +215,7 @@ var addTask = function(data, callback) {
         }
 
         connection.query("INSERT INTO pm_tasks (`title`, `description`, `priority`, `plannedCapacity`, `actualCapacity`, `assigneeId`, `creatorId`, `projectId`, `status`) " +
-            "VALUES ('" + data.title + "', '" + data.description + "', '" + data.priority + "', '" + data.plannedCapacity + "', " +
+            "VALUES ('" + data.title.escape() + "', '" + data.description.escape() + "', '" + data.priority + "', '" + data.plannedCapacity + "', " +
             "'" + data.actualCapacity + "', '" + data.assigneeId + "', '" + data.creatorId + "', '" + data.projectId + "', '" + data.status + "');",
             function (err, rows) {
                 if (err) {
@@ -268,10 +268,10 @@ var updateTask = function(data, callback) {
 
         var properties = [];
         if (data.title != undefined) {
-            properties.push(("`title`='" + data.title + "'"));
+            properties.push(("`title`='" + data.title.escape() + "'"));
         }
         if (data.description != undefined) {
-            properties.push(("`description`='" + data.description + "'"));
+            properties.push(("`description`='" + data.description.escape() + "'"));
         }
         if (data.priority != undefined) {
             properties.push(("`priority`='" + data.priority + "'"));
