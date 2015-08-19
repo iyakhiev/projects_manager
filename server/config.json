@@ -1,0 +1,9 @@
+{
+    "port": 8000,
+    "db": {
+        "host": "localhost",
+        "db": "nigz",
+        "user": "isa",
+        "password": "12345678"
+    }
+}
