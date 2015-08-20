@@ -1,8 +1,8 @@
 var express = require('express'),
     app = express(),
     path = require('path'),
-    db = require('./db'),
     config = require('./config'),
+    db = new (require('./db'))(config),
     bodyParser = require('body-parser');
 
 app.use(express.static(path.join(__dirname, '../app')));

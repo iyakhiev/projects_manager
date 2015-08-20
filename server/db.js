@@ -1,12 +1,13 @@
-var mysql = require('mysql'),
-    config = require('./config');
+var mysql = require('mysql');
 
-var pool = mysql.createPool({
-    host: config.db.host,
-    user: config.db.user,
-    password: config.db.password,
-    database: config.db.db
-});
+function DB(config) {
+    this.pool = mysql.createPool({
+        host: config.db.host,
+        user: config.db.user,
+        password: config.db.password,
+        database: config.db.db
+    });
+}
 
 var escape = {
     exp : /["'\\]/g,
@@ -23,8 +24,14 @@ String.prototype.escape = function() {
     });
 };
 
-var addUser = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.getConnection = function(callback) {
+    this.pool.getConnection(function (err, connection) {
+        callback(err, connection);
+    });
+};
+
+DB.prototype.addUser = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -47,8 +54,8 @@ var addUser = function(data, callback) {
     });
 };
 
-var getUser = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.getUser = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -75,14 +82,8 @@ var getUser = function(data, callback) {
     });
 };
 
-var getConnection = function(callback) {
-    pool.getConnection(function (err, connection) {
-        callback(err, connection);
-    });
-};
-
-var getProject = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.getProject = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({ "place": "1", "id": "-1", "code": err});
             return;
@@ -128,8 +129,8 @@ var getProject = function(data, callback) {
     });
 };
 
-var deleteProject = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.deleteProject = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -160,8 +161,8 @@ var deleteProject = function(data, callback) {
     });
 };
 
-var updateProject = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.updateProject = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -184,8 +185,8 @@ var updateProject = function(data, callback) {
     });
 };
 
-var addProject = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.addProject = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -207,8 +208,8 @@ var addProject = function(data, callback) {
     });
 };
 
-var addTask = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.addTask = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -232,8 +233,8 @@ var addTask = function(data, callback) {
     });
 };
 
-var getTask = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.getTask = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -259,8 +260,8 @@ var getTask = function(data, callback) {
     });
 };
 
-var updateTask = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.updateTask = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -305,8 +306,8 @@ var updateTask = function(data, callback) {
     });
 };
 
-var deleteTask = function(data, callback) {
-    getConnection(function (err, connection) {
+DB.prototype.deleteTask = function(data, callback) {
+    this.getConnection(function (err, connection) {
         if (err) {
             callback({"id": "-1", "code": err.code});
             return;
@@ -328,13 +329,4 @@ var deleteTask = function(data, callback) {
     });
 };
 
-module.exports.updateProject = updateProject;
-module.exports.deleteProject = deleteProject;
-module.exports.getProject = getProject;
-module.exports.addProject = addProject;
-module.exports.updateTask = updateTask;
-module.exports.deleteTask = deleteTask;
-module.exports.addTask = addTask;
-module.exports.getTask = getTask;
-module.exports.addUser = addUser;
-module.exports.getUser = getUser;
+module.exports = DB;
