@@ -1,0 +1,9 @@
+{
+    "port": 8000,
+    "db": {
+        "host": "localhost",
+        "db": "projectsm",
+        "user": "isa",
+        "password": "030193Ch"
+    }
+}
