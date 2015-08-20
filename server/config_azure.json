@@ -2,8 +2,8 @@
     "port": 8080,
     "db": {
         "host": "eu-cdbr-azure-north-d.cloudapp.net",
-        "db": "pm",
-        "user": "bd9f87f5b07057",
-        "password": "a9a42941"
+        "db": "projectsmanager",
+        "user": "b548138104560a",
+        "password": "eedf9708"
     }
 }
