@@ -1,9 +1,9 @@
 {
-    "port": 8000,
+    "port": 8080,
     "db": {
-        "host": "localhost",
-        "db": "projectsm",
-        "user": "isa",
-        "password": "030193Ch"
+        "host": "eu-cdbr-azure-north-d.cloudapp.net",
+        "db": "pm",
+        "user": "b1137ff303705d",
+        "password": "66cc8e0e"
     }
 }
