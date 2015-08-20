@@ -1,8 +1,10 @@
+tmp
+.idea
 logs/*
 !.gitkeep
 node_modules/
-tmp
 .DS_Store
 /server/config.json
-.idea
 server/config.json
+/server/config_azure.json
+server/config_azure.json
