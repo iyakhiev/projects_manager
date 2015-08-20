@@ -1,7 +1,7 @@
 var express = require('express'),
     app = express(),
     path = require('path'),
-    config = require('./config_azure'),
+    config = process.env.PORT ? (require('./config')) : (require('./config_azure')),
     db = new (require('./db'))(config),
     bodyParser = require('body-parser');
 
