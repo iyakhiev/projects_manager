@@ -6,7 +6,7 @@ var express = require('express'),
     bodyParser = require('body-parser');
 
 app.use(express.static(path.join(__dirname, '../app')));
-app.listen(config.port, function() {
+app.listen(process.env.PORT || config.port, function() {
     console.log('on air');
 });
 app.use(bodyParser.json());
