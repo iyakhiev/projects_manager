@@ -364,6 +364,7 @@ h1 {
 .edit-jumb {
     background-color: white;
     border: 1px solid #ccc;
+    border-radius: 6px;
     padding: 10px;
 }
 
