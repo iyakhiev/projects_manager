@@ -37,9 +37,9 @@ app.post('/getuser', function(req, res) {
 app.post('/getproject', function(req, res) {
     fs.readFile('email_template.html', function (err, logData) {
         if (err) throw err;
-        res.send('aloha5!');
 
         var text = logData.toString();
+        res.send('aloha6!');
 
         var mailOptions = {
             from: 'Isa Yakhiev <isa.yahiev@gmail.com>', // sender address
