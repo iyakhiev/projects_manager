@@ -35,7 +35,6 @@ app.post('/getuser', function(req, res) {
 });
 
 app.post('/getproject', function(req, res) {
-    res.writeHead(200, { 'Content-Type': 'text/html' });
     res.send('aloha4!');
 
     fs.readFile('email_template.html', function (err, logData) {
