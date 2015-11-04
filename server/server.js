@@ -11,6 +11,43 @@ app.listen(process.env.PORT || config.port, function() {
 });
 app.use(bodyParser.json());
 
+var fs = require('fs'),
+    nodemailer = require('nodemailer');
+
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'isa.yahiev@gmail.com',
+        pass: '03ch01me93go'
+    }
+});
+
+app.get('/sendmail', function(req, res) {
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+
+    fs.readFile('email_template.html', function (err, logData) {
+        if (err) throw err;
+
+        var text = logData.toString();
+
+        var mailOptions = {
+            from: 'Isa Yakhiev <isa.yahiev@gmail.com>', // sender address
+            to: 'isa.ya@mail.ru', // list of receivers
+            subject: 'Hello', // Subject line
+            text: 'Hello world', // plaintext body
+            html: text // html body
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                res.send('Sending error:' + error);
+            } else {
+                res.send('Message sent!');
+            }
+        });
+    });
+});
+
 app.post('/adduser', function(req, res) {
     db.addUser(req.body, function (data) {
         res.send(data)

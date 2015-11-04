@@ -80,7 +80,7 @@ projectsManagerCtrls.controller('RegisterCtrl', ['$scope', '$http', '$cookieStor
         $scope.userInfo = {
             error: false,
             loading: false,
-            "mailRegistered": false
+            mailRegistered: false
         };
 
         $scope.register = function () {
