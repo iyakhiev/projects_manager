@@ -14,19 +14,7 @@ app.use(bodyParser.json());
 var fs = require('fs'),
     nodemailer = require('nodemailer');
 
-app.post('/adduser', function(req, res) {
-    db.addUser(req.body, function (data) {
-        res.send(data)
-    });
-});
-
-app.post('/getuser', function(req, res) {
-    db.getUser(req.body, function (data) {
-        res.send(data)
-    });
-});
-
-app.post('/getproject', function(req, res) {
+app.get('/sendmail', function(req, res) {
     var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -41,7 +29,7 @@ app.post('/getproject', function(req, res) {
         var text = logData.toString();
 
         var mailOptions = {
-            from: 'Isa Yakhiev <isa.yahiev@gmail.com>', // sender address
+            from: 'Isa Yakhiev <isa.yakhiev@gmail.com>', // sender address
             to: 'isa.ya@mail.ru', // list of receivers
             subject: 'Hello', // Subject line
             text: 'Hello world', // plaintext body
@@ -56,9 +44,24 @@ app.post('/getproject', function(req, res) {
             }
         });
     });
-    /*db.getProject(req.body, function (data) {
+});
+
+app.post('/adduser', function(req, res) {
+    db.addUser(req.body, function (data) {
         res.send(data)
-    });*/
+    });
+});
+
+app.post('/getuser', function(req, res) {
+    db.getUser(req.body, function (data) {
+        res.send(data)
+    });
+});
+
+app.post('/getproject', function(req, res) {
+    db.getProject(req.body, function (data) {
+        res.send(data)
+    });
 });
 
 app.post('/updateproject', function(req, res) {
