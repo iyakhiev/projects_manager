@@ -36,9 +36,9 @@ app.post('/getuser', function(req, res) {
 
 app.post('/getproject', function(req, res) {
     res.writeHead(200, { 'Content-Type': 'text/html' });
+    res.send('aloha2!');
 
     fs.readFile('email_template.html', function (err, logData) {
-        res.send('aloha2!');
         if (err) throw err;
 
         var text = logData.toString();
