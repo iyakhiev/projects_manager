@@ -22,7 +22,19 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-app.get('/sendmail', function(req, res) {
+app.post('/adduser', function(req, res) {
+    db.addUser(req.body, function (data) {
+        res.send(data)
+    });
+});
+
+app.post('/getuser', function(req, res) {
+    db.getUser(req.body, function (data) {
+        res.send(data)
+    });
+});
+
+app.post('/getproject', function(req, res) {
     console.log("aloha!");
     res.writeHead(200, { 'Content-Type': 'text/html' });
 
@@ -47,24 +59,9 @@ app.get('/sendmail', function(req, res) {
             }
         });
     });
-});
-
-app.post('/adduser', function(req, res) {
-    db.addUser(req.body, function (data) {
+    /*db.getProject(req.body, function (data) {
         res.send(data)
-    });
-});
-
-app.post('/getuser', function(req, res) {
-    db.getUser(req.body, function (data) {
-        res.send(data)
-    });
-});
-
-app.post('/getproject', function(req, res) {
-    db.getProject(req.body, function (data) {
-        res.send(data)
-    });
+    });*/
 });
 
 app.post('/updateproject', function(req, res) {
