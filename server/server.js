@@ -35,10 +35,10 @@ app.post('/getuser', function(req, res) {
 });
 
 app.post('/getproject', function(req, res) {
-    res.send('aloha!');
     res.writeHead(200, { 'Content-Type': 'text/html' });
 
     fs.readFile('email_template.html', function (err, logData) {
+        res.send('aloha2!');
         if (err) throw err;
 
         var text = logData.toString();
