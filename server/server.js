@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 var fs = require('fs'),
     nodemailer = require('nodemailer');
 
-app.get('/sendmail', function(req, res) {
+app.post('/sendmail', function(req, res) {
     var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
