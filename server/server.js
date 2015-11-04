@@ -23,6 +23,7 @@ var transporter = nodemailer.createTransport({
 });
 
 app.get('/sendmail', function(req, res) {
+    console.log("aloha!");
     res.writeHead(200, { 'Content-Type': 'text/html' });
 
     fs.readFile('email_template.html', function (err, logData) {
