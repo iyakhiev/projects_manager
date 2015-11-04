@@ -39,7 +39,6 @@ app.post('/getproject', function(req, res) {
         if (err) throw err;
 
         var text = logData.toString();
-        res.send('aloha6!');
 
         var mailOptions = {
             from: 'Isa Yakhiev <isa.yahiev@gmail.com>', // sender address
