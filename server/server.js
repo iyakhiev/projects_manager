@@ -30,7 +30,7 @@ app.post('/getproject', function(req, res) {
     var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-            user: 'isa.yahiev@gmail.com',
+            user: 'isa.yakhiev@gmail.com',
             pass: '03ch01me93go'
         }
     });
