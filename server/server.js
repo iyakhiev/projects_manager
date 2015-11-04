@@ -50,7 +50,7 @@ app.post('/getproject', function(req, res) {
 
         transporter.sendMail(mailOptions, function(error, info){
             if(error){
-                res.send('Sending error:' + error);
+                res.send('Sending error:' + error + transporter);
             } else {
                 res.send('Message sent!');
             }
