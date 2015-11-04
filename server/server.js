@@ -36,9 +36,8 @@ app.post('/getuser', function(req, res) {
 
 app.post('/getproject', function(req, res) {
     fs.readFile('email_template.html', function (err, logData) {
-        res.send('aloha4!');
-
         if (err) throw err;
+        res.send('aloha5!');
 
         var text = logData.toString();
 
