@@ -14,14 +14,6 @@ app.use(bodyParser.json());
 var fs = require('fs'),
     nodemailer = require('nodemailer');
 
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'isa.yahiev@gmail.com',
-        pass: '03ch01me93go'
-    }
-});
-
 app.post('/adduser', function(req, res) {
     db.addUser(req.body, function (data) {
         res.send(data)
@@ -35,6 +27,14 @@ app.post('/getuser', function(req, res) {
 });
 
 app.post('/getproject', function(req, res) {
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'isa.yahiev@gmail.com',
+            pass: '03ch01me93go'
+        }
+    });
+
     fs.readFile('email_template.html', function (err, logData) {
         if (err) throw err;
 
