@@ -15,36 +15,35 @@ var fs = require('fs'),
     nodemailer = require('nodemailer');
 
 app.post('/sendmail', function(req, res) {
-    res.send('Aloha!');
-    //var transporter = nodemailer.createTransport({
-    //    service: 'Gmail',
-    //    auth: {
-    //        user: 'isa.yakhiev@gmail.com',
-    //        pass: '03ch01me93go'
-    //    }
-    //});
-    //
-    //fs.readFile('email_template.html', function (err, logData) {
-    //    if (err) throw err;
-    //
-    //    var text = logData.toString();
-    //
-    //    var mailOptions = {
-    //        from: 'Isa Yakhiev <isa.yakhiev@gmail.com>', // sender address
-    //        to: 'isa.ya@mail.ru', // list of receivers
-    //        subject: 'Hello', // Subject line
-    //        text: 'Hello world', // plaintext body
-    //        html: text // html body
-    //    };
-    //
-    //    transporter.sendMail(mailOptions, function(error, info){
-    //        if(error){
-    //            res.send('Sending error:' + error);
-    //        } else {
-    //            res.send('Message sent!');
-    //        }
-    //    });
-    //});
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'isa.yakhiev@gmail.com',
+            pass: '03ch01me93go'
+        }
+    });
+
+    fs.readFile('email_template.html', function (err, logData) {
+        if (err) throw err;
+
+        var text = logData.toString();
+
+        var mailOptions = {
+            from: 'Isa Yakhiev <isa.yakhiev@gmail.com>', // sender address
+            to: 'isa.ya@mail.ru', // list of receivers
+            subject: 'Hello', // Subject line
+            text: 'Hello world', // plaintext body
+            html: text // html body
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if(error){
+                res.send('Sending error:' + error);
+            } else {
+                res.send('Message sent!');
+            }
+        });
+    });
 });
 
 app.post('/adduser', function(req, res) {
