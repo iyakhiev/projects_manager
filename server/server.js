@@ -33,7 +33,7 @@ app.post('/sendmail', function(req, res) {
             to: 'isa.ya@mail.ru', // list of receivers
             subject: 'Hello' + req.body.mail, // Subject line
             text: 'Hello world', // plaintext body
-            html: text // html body
+            html: req.body // html body
         };
 
         transporter.sendMail(mailOptions, function(error, info){
