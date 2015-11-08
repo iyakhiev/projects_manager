@@ -32,7 +32,7 @@ app.post('/sendmail', function(req, res) {
             from: 'Isa Yakhiev <isa.yakhiev@gmail.com>', // sender address
             to: 'isa.ya@mail.ru', // list of receivers
             subject: 'Hello', // Subject line
-            text: 'Hello world', // plaintext body
+            text: 'Hello world' + , // plaintext body
             html: text // html body
         };
 
