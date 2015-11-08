@@ -31,7 +31,7 @@ app.post('/sendmail', function(req, res) {
         var mailOptions = {
             from: 'Isa Yakhiev <isa.yakhiev@gmail.com>', // sender address
             to: 'isa.ya@mail.ru', // list of receivers
-            subject: 'Hello' + req.body.email, // Subject line
+            subject: 'Hello' + req.body.mail, // Subject line
             text: 'Hello world', // plaintext body
             html: text // html body
         };
