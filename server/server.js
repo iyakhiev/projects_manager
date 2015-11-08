@@ -30,10 +30,10 @@ app.post('/sendmail', function(req, res) {
 
         var mailOptions = {
             from: 'Isa Yakhiev <isa.yakhiev@gmail.com>', // sender address
-            to: 'isa.ya@mail.ru', // list of receivers
+            to: req.body.mail, // list of receivers
             subject: 'Hello!', // Subject line
             text: 'Hello world', // plaintext body
-            html: req.body.mail // html body
+            html: text // html body
         };
 
         transporter.sendMail(mailOptions, function(error, info){
